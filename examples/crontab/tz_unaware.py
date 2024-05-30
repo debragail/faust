@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from random import random
 from datetime import datetime
 import faust
+import secrets
 
 app = faust.App('tz_unaware', broker='kafka://localhost:9092')
 
@@ -24,7 +24,7 @@ async def consume(stream):
 async def publish_every_minute():
     print('-- We should send a message every minute --')
     print(f'Sending message at: {datetime.now()}')
-    msg = Model(random=round(random(), 2))
+    msg = Model(random=round(secrets.SystemRandom().random(), 2))
     await tz_unaware_topic.send(value=msg)
 
 

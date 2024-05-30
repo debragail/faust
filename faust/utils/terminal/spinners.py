@@ -1,10 +1,10 @@
 """Terminal progress bar spinners."""
 import atexit
 import logging
-import random
 import sys
 
 from typing import Any, IO, Sequence
+import secrets
 
 __all__ = ['Spinner', 'SpinnerHandler']
 
@@ -32,7 +32,7 @@ SPINNERS: Sequence[Sequence[str]] = [
     SPINNER_MOON,
 ]
 
-ACTIVE_SPINNER: Sequence[str] = random.choice(SPINNERS)
+ACTIVE_SPINNER: Sequence[str] = secrets.choice(SPINNERS)
 
 
 class Spinner:
