@@ -12,10 +12,10 @@ After starting Kafka locally, you can run the example:
 
 You can also see stats about the worker by visiting http://localhost:6066.
 """
-import random
 from typing import Any, Awaitable, Callable, Mapping, MutableMapping, Sequence
 import faust
 from mode.utils.objects import qualname
+import secrets
 
 
 class Request(faust.Record):
@@ -100,7 +100,7 @@ async def add(x: int, y: int) -> int:
 
 @app.timer(1.0)
 async def _send_tasks() -> None:
-    await add.delay(random.randint(0, 100), random.randint(0, 100))
+    await add.delay(secrets.SystemRandom().randint(0, 100), secrets.SystemRandom().randint(0, 100))
 
 
 if __name__ == '__main__':

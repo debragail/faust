@@ -1,10 +1,10 @@
 import asyncio
 import os
-import random
 import sys
 from itertools import count
 from time import monotonic
 from faust.cli import option
+import secrets
 
 __all__ = ['Benchmark']
 
@@ -96,7 +96,7 @@ class Benchmark:
                 print(f'+SEND {i} in {monotonic() - time_start}s')
                 time_start = monotonic()
             if max_latency:
-                await asyncio.sleep(random.uniform(0, max_latency))
+                await asyncio.sleep(secrets.SystemRandom().uniform(0, max_latency))
         await asyncio.sleep(10)
         await app.producer.stop()
         print(f'Time spent on {i} messages: {monotonic() - time_start}s')

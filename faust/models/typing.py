@@ -8,7 +8,6 @@ to deserialize such a structure.
 """
 import abc
 import os
-import random
 import string
 import sys
 from collections import defaultdict
@@ -54,6 +53,7 @@ from faust.utils import codegen
 from faust.utils.functional import translate
 from faust.utils.iso8601 import parse as parse_iso8601
 from faust.utils.json import str_to_decimal
+import secrets
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing_extensions import Final
@@ -274,7 +274,7 @@ class Node(abc.ABC):
         ...
 
     def random_identifier(self, n: int = 8) -> str:
-        return ''.join(random.choice(string.ascii_letters) for _ in range(n))
+        return ''.join(secrets.choice(string.ascii_letters) for _ in range(n))
 
     @abc.abstractmethod
     def build(self, var: Variable, *args: Type) -> str:

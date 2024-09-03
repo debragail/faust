@@ -3,10 +3,10 @@
 # This example needs pytz so that we can set the approprate timezone when
 # setting the crontab
 
-from random import random
 from datetime import datetime
 import faust
 import pytz
+import secrets
 
 app = faust.App('tz_aware', broker='kafka://localhost:9092')
 pacific = pytz.timezone('US/Pacific')
@@ -29,7 +29,7 @@ async def consume(stream):
 async def publish_at_8_20_pm_pacific():
     print('-- This should be sent at 20:16 Pacific time --')
     print(f'Sending message at: {datetime.now()}')
-    msg = Model(random=round(random(), 2))
+    msg = Model(random=round(secrets.SystemRandom().random(), 2))
     await tz_aware_topic.send(value=msg)
 
 
