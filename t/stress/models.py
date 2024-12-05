@@ -1,7 +1,7 @@
-import random
 from datetime import datetime, timezone
 from itertools import count
 import faust
+import secrets
 
 
 class Withdrawal(faust.Record, isodates=True, serializer='json'):
@@ -24,8 +24,8 @@ def generate_withdrawals_dict(n: int = None):
     users = [f'user_{i}' for i in range(num_users)]
     for _ in range(n) if n is not None else count():
         yield {
-            'user': random.choice(users),
-            'amount': random.uniform(0, 25_000),
-            'country': random.choices(countries, country_dist)[0],
+            'user': secrets.choice(users),
+            'amount': secrets.SystemRandom().uniform(0, 25_000),
+            'country': secrets.SystemRandom().choices(countries, country_dist)[0],
             'date': datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),
         }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import random
 import faust
+import secrets
 
 
 app = faust.App(
@@ -13,7 +13,7 @@ app = faust.App(
 @app.timer(2.0, on_leader=True)
 async def publish_greetings():
     print('PUBLISHING ON LEADER!')
-    await say.send(value=str(random.random()))
+    await say.send(value=str(secrets.SystemRandom().random()))
 
 
 @app.agent()

@@ -24,9 +24,9 @@
 # - delta(30): Gets the value of window 30 secs before the current event. For
 # the first 20 seconds it will be 0 and after second 30 it will always be 5.
 
-from random import random
 from datetime import timedelta
 import faust
+import secrets
 
 app = faust.App('windowing', broker='kafka://localhost:9092')
 
@@ -58,7 +58,7 @@ async def print_windowed_events(stream):
 
 @app.timer(2.0, on_leader=True)
 async def publish_every_2secs():
-    msg = Model(random=round(random(), 2))
+    msg = Model(random=round(secrets.SystemRandom().random(), 2))
     await hopping_topic.send(value=msg)
 
 

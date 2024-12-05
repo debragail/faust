@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from time import time
-import random
 import faust
+import secrets
 
 
 class RawModel(faust.Record):
@@ -69,7 +69,7 @@ async def print_windowed_events(stream):
 
 @app.timer(0.1)
 async def produce():
-    await source.send(value=RawModel(value=random.random(), date=int(time())))
+    await source.send(value=RawModel(value=secrets.SystemRandom().random(), date=int(time())))
 
 
 if __name__ == '__main__':
