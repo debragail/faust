@@ -2,7 +2,6 @@ import aiokafka
 import faust
 import opentracing
 import pytest
-import random
 import string
 from contextlib import contextmanager
 from typing import Optional
@@ -30,6 +29,7 @@ from faust.transport.drivers.aiokafka import (
 from faust.types import TP
 from mode.utils.futures import done_future
 from mode.utils.mocks import ANY, AsyncMock, MagicMock, Mock, call, patch
+import secrets
 
 TP1 = TP('topic', 23)
 TP2 = TP('topix', 23)
@@ -1172,8 +1172,7 @@ class test_AIOKafkaConsumerThread(AIOKafkaConsumerThreadFixtures):
 
     @pytest.mark.asyncio
     async def test_create_topic_invalid_name(self, cthread, _consumer):
-        topic = ''.join(random.choices(
-            string.ascii_uppercase, k=TOPIC_LENGTH_MAX + 1))
+        topic = ''.join(secrets.SystemRandom().choices(string.ascii_uppercase, k=TOPIC_LENGTH_MAX + 1))
         cthread._consumer = _consumer
 
         msg = f'Topic name {topic!r} is too long (max={TOPIC_LENGTH_MAX})'

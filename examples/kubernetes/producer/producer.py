@@ -1,6 +1,6 @@
 import json
-from random import random
 from kafka import KafkaProducer
+import secrets
 
 TOPIC = 'test'
 KEY = 'score'
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     for index in range(0, 10000):
         message = {
             'index': index,
-            'value': round(random(), 2),
+            'value': round(secrets.SystemRandom().random(), 2),
         }
         publish_message(kafka_producer, TOPIC, KEY, json.dumps(message))
     if kafka_producer is not None:

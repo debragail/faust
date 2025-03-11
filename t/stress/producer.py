@@ -1,9 +1,9 @@
 import asyncio
-import random
 import sys
 from typing import Any, Set
 from faust.cli import option
 from mode.utils.aiter import aiter, anext
+import secrets
 
 
 def install_produce_command(app) -> None:
@@ -38,7 +38,7 @@ def install_produce_command(app) -> None:
             if not prods:
                 await asyncio.sleep(1.0)
             if max_latency:
-                await asyncio.sleep(random.uniform(0, max_latency))
+                await asyncio.sleep(secrets.SystemRandom().uniform(0, max_latency))
             for producer in to_remove:
                 prods.discard(producer)
         print('No more producers - exiting', file=sys.stderr)

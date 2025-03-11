@@ -15,11 +15,11 @@ Quick Start
     $ ./examples/simple.py produce
 """
 import asyncio
-import random
 from datetime import datetime, timezone
 from itertools import count
 import faust
 from faust.cli import option
+import secrets
 
 
 class Withdrawal(faust.Record, isodates=True, serializer='json'):
@@ -76,7 +76,7 @@ async def produce(self, max_latency: float, max_messages: int):
         if not i % 10000:
             self.say(f'+SEND {i}')
         if max_latency:
-            await asyncio.sleep(random.uniform(0, max_latency))
+            await asyncio.sleep(secrets.SystemRandom().uniform(0, max_latency))
 
 
 def generate_withdrawals_dict(n: int = None):
@@ -87,9 +87,9 @@ def generate_withdrawals_dict(n: int = None):
     users = [f'user_{i}' for i in range(num_users)]
     for _ in range(n) if n is not None else count():
         yield {
-            'user': random.choice(users),
-            'amount': random.uniform(0, 25_000),
-            'country': random.choices(countries, country_dist)[0],
+            'user': secrets.choice(users),
+            'amount': secrets.SystemRandom().uniform(0, 25_000),
+            'country': secrets.SystemRandom().choices(countries, country_dist)[0],
             'date': datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),
         }
 
