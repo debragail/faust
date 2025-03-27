@@ -7,6 +7,7 @@ from faust.types import AppT
 from faust.utils.json import loads
 import pytest
 from t.integration import app as _app_module
+from security import safe_command
 
 
 @pytest.fixture
@@ -35,8 +36,7 @@ def _create_faust_cli(executable: Path, *partial_args: str,
         partial_args += ('--json',)
 
     def call_faust_cli(*args: str) -> Tuple[str, str]:
-        p = subprocess.Popen(
-            [sys.executable,
+        p = safe_command.run(subprocess.Popen, [sys.executable,
              str(executable)] + list(partial_args) + list(args),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
