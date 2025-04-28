@@ -28,7 +28,7 @@ FAUST_STORE_URL = 'rocksdb://'
 SECRET_KEY = 'nb007*n+1$k!q5h6qclg$_xgyy%4s2vc=$vg-#%m0nuz-oal&5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
