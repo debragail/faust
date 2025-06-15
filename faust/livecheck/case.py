@@ -6,7 +6,6 @@ from collections import deque
 from contextlib import ExitStack
 from datetime import datetime, timedelta, timezone
 from itertools import count
-from random import uniform
 from statistics import median
 from time import monotonic
 from typing import (
@@ -35,6 +34,7 @@ from .locals import current_execution_stack, current_test_stack
 from .models import SignalEvent, State, TestExecution, TestReport
 from .runners import TestRunner
 from .signals import BaseSignal
+import secrets
 
 if typing.TYPE_CHECKING:
     from .app import LiveCheck as _LiveCheck
@@ -207,7 +207,7 @@ class Case(Service):
         """Schedule test execution, or not, based on probability setting."""
         execution: Optional[TestExecution] = None
         with ExitStack() as exit_stack:
-            if uniform(0, 1) < self.probability:
+            if secrets.SystemRandom().uniform(0, 1) < self.probability:
                 execution = await self.trigger(id, *args, **kwargs)
                 exit_stack.enter_context(current_test_stack.push(execution))
             yield execution

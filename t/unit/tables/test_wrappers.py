@@ -1,5 +1,4 @@
 import operator
-import random
 from datetime import datetime
 
 import faust
@@ -9,6 +8,7 @@ from faust.exceptions import ImproperlyConfigured
 from faust.tables.wrappers import WindowSet
 from faust.types import Message
 from mode.utils.mocks import Mock, patch
+import secrets
 
 DATETIME = datetime.utcnow()
 DATETIME_TS = DATETIME.timestamp()
@@ -372,7 +372,7 @@ class test_WindowWrapper_using_key_index:
 
     @pytest.fixture()
     def remove_a_key(self, *, iwtable, data):
-        remove_key = random.choice(list(self.TABLE_DATA))
+        remove_key = secrets.choice(list(self.TABLE_DATA))
         items_leftover = {
             k: v for
             k, v in self.TABLE_DATA.items()

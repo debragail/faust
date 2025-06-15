@@ -1,9 +1,9 @@
 import asyncio
 import os
-import random
 import subprocess
 import sys
 from t.consistency.consistency_checker import ConsistencyChecker
+import secrets
 
 
 class Stresser(object):
@@ -42,7 +42,7 @@ class Stresser(object):
                 await self._maybe_stop_worker()
             if self._should():
                 await self._maybe_spawn_worker()
-            await asyncio.sleep(random.uniform(1, 20))
+            await asyncio.sleep(secrets.SystemRandom().uniform(1, 20))
 
     def stop_stresser(self):
         print('Stopping stresser')
@@ -50,23 +50,23 @@ class Stresser(object):
 
     def _should(self):
         return (
-            random.choices([True, False], [0.75, 0.25], k=1)[0] and
+            secrets.SystemRandom().choices([True, False], [0.75, 0.25], k=1)[0] and
             not self._stop_stresser.is_set()
         )
 
     async def _maybe_stop_worker(self):
         print('Maybe stop')
         if len(self._running) > 1:
-            await self._stop_worker(random.choice(list(self._running)))
+            await self._stop_worker(secrets.choice(list(self._running)))
 
     async def _maybe_spawn_worker(self):
         print('Maybe start')
         if self._stopped:
-            await self._start_worker(random.choice(list(self._stopped)))
+            await self._start_worker(secrets.choice(list(self._stopped)))
 
     async def start(self, stopped_at_start=0):
         assert stopped_at_start < self.num_workers
-        start_workers = random.sample(list(self.workers),
+        start_workers = secrets.SystemRandom().sample(list(self.workers),
                                       self.num_workers - stopped_at_start)
         print(f'Start workers: {start_workers!r}')
         await asyncio.wait([self._start_producer(producer)

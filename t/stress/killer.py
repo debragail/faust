@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-import random
 import signal
 from itertools import cycle
 from typing import List, NamedTuple
 
 import envoy
 from mode import Service, Worker
+import secrets
 
 
 class Span(NamedTuple):
@@ -15,7 +15,7 @@ class Span(NamedTuple):
     max_sleep: float
 
     def seconds_to_sleep(self):
-        return random.uniform(self.min_sleep, self.max_sleep)
+        return secrets.SystemRandom().uniform(self.min_sleep, self.max_sleep)
 
 
 class Chaos(Service):
@@ -67,7 +67,7 @@ class Chaos(Service):
             secs = current_span.seconds_to_sleep()
             self.log.info('Signal dispatcher sleeping for %r seconds...', secs)
             await self.sleep(secs)
-            sig = random.choice(current_span.signals)
+            sig = secrets.choice(current_span.signals)
             self.log.warning('Signalling all workers on this box with %r', sig)
             r = envoy.run(f'pkill -{int(sig)} Faust:Worker')
             if r.status_code:

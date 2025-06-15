@@ -1,9 +1,9 @@
-import random
 from collections import Counter
 from copy import copy
 from faust import Stream
 from ...reports import checks
 from ...app import create_stress_app
+import secrets
 
 keys_set = 0
 found_duplicates = 0
@@ -89,7 +89,7 @@ async def on_leader_send_monotonic_counter(app, max_latency=0.01) -> None:
                 current_value = partitions_sent_counter.get(partition, 0)
                 await process.send(value=current_value, partition=partition)
                 partitions_sent_counter[partition] += 1
-            await app.sleep(random.uniform(0, max_latency))
+            await app.sleep(secrets.SystemRandom().uniform(0, max_latency))
         else:
             await app.sleep(1)
 
